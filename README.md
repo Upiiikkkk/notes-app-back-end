@@ -108,40 +108,38 @@ init();
 
 ```mermaid
 graph TD
-    A[Client Request] --> B[Server.js - Hapi Server]
-    B --> C{Routes.js}
+    A[Client Request] --> B[Hapi Server]
+    B --> C[Routing Table]
     
-    C -->|POST /notes| D[addNoteHandler]
-    C -->|GET /notes| E[getAllNoteHandler]
-    C -->|GET /notes/{id}| F[getByIdHandler]
-    C -->|PUT /notes/{id}| G[editByIdHandler]
-    C -->|DELETE /notes/{id}| H[deleteByIdHandler]
+    C -->|POST /notes| D[Create Note]
+    C -->|GET /notes| E[Read All Notes]
+    C -->|GET /notes/:id| F[Read Single Note]
+    C -->|PUT /notes/:id| G[Update Note]
+    C -->|DELETE /notes/:id| H[Delete Note]
     
-    D --> I[Create ID with nanoid]
-    I --> J[Add to notes array]
-    J --> K{Success?}
-    K -->|Yes| L[Return 201 Success]
-    K -->|No| M[Return 500 Error]
+    D --> I[Generate ID]
+    I --> J[Store in Memory]
+    J --> K[Return 201 Created]
     
-    E --> N[Return all notes]
+    E --> L[Read from Memory]
+    L --> M[Return 200 OK]
     
-    F --> O[Find note by ID]
-    O --> P{Found?}
-    P -->|Yes| Q[Return note data]
-    P -->|No| R[Return 404 Error]
+    F --> N[Find by ID]
+    N --> O{Found?}
+    O -->|Yes| P[Return 200 OK]
+    O -->|No| Q[Return 404 Not Found]
     
-    G --> S[Find note index]
-    S --> T{Found?}
-    T -->|Yes| U[Update note]
-    U --> V[Return 200 Success]
-    T -->|No| W[Return 404 Error]
+    G --> R[Find Index by ID]
+    R --> S{Found?}
+    S -->|Yes| T[Update Object]
+    T --> U[Return 200 OK]
+    S -->|No| V[Return 404 Not Found]
     
-    H --> X[Find note index]
-    X --> Y{Found?}
-    Y -->|Yes| Z[Delete note]
-    Z --> AA[Return 200 Success]
-    Y -->|No| BB[Return 404 Error]
-
+    H --> W[Find Index by ID]
+    W --> X{Found?}
+    X -->|Yes| Y[Remove from Array]
+    Y --> Z[Return 200 OK]
+    X -->|No| AA[Return 404 Not Found]    
 ```
 
 ---
