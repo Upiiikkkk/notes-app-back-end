@@ -107,19 +107,41 @@ init();
 #### Server Initialization Flow
 
 ```mermaid
-flowchart TD
-    Start[Start Application]
-    LoadRoutes[Load Route Definitions]
-    CreateServer[Create Hapi Server]
-    RegisterRoutes[Register Routes]
-    StartServer[Start Server]
-    ListenRequests[Listen for Requests]
+graph TD
+    A[Client Request] --> B[Server.js - Hapi Server]
+    B --> C{Routes.js}
+    
+    C -->|POST /notes| D[addNoteHandler]
+    C -->|GET /notes| E[getAllNoteHandler]
+    C -->|GET /notes/{id}| F[getByIdHandler]
+    C -->|PUT /notes/{id}| G[editByIdHandler]
+    C -->|DELETE /notes/{id}| H[deleteByIdHandler]
+    
+    D --> I[Create ID with nanoid]
+    I --> J[Add to notes array]
+    J --> K{Success?}
+    K -->|Yes| L[Return 201 Success]
+    K -->|No| M[Return 500 Error]
+    
+    E --> N[Return all notes]
+    
+    F --> O[Find note by ID]
+    O --> P{Found?}
+    P -->|Yes| Q[Return note data]
+    P -->|No| R[Return 404 Error]
+    
+    G --> S[Find note index]
+    S --> T{Found?}
+    T -->|Yes| U[Update note]
+    U --> V[Return 200 Success]
+    T -->|No| W[Return 404 Error]
+    
+    H --> X[Find note index]
+    X --> Y{Found?}
+    Y -->|Yes| Z[Delete note]
+    Z --> AA[Return 200 Success]
+    Y -->|No| BB[Return 404 Error]
 
-    Start --> LoadRoutes
-    LoadRoutes --> CreateServer
-    CreateServer --> RegisterRoutes
-    RegisterRoutes --> StartServer
-    StartServer --> ListenRequests
 ```
 
 ---
